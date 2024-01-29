@@ -1,3 +1,4 @@
+# home.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -9,12 +10,13 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import clickhouse_connect
 import pydeck as pdk
+from Main import check_password, st
 
+if not check_password():
+    st.stop()
 
-# Kiểm tra trạng thái đăng nhập từ session_state của main.py
-is_logged_in = st.session_state.get("is_logged_in")
-
-if is_logged_in:
+# Trang chính sau khi đăng nhập
+def show_home_page():
     st.set_page_config(layout="wide")
     st.title("CHI CỤC DÂN SỐ - KẾ HOẠCH HÓA GIA ĐÌNH")
     st.info("Diện tích, dân số, mật độ theo đơn vị hành chính")
@@ -323,11 +325,6 @@ if is_logged_in:
 # Display the map with PyDeck
     col2.pydeck_chart(map_deck)
 
-else:
-    st.warning("Bạn cần đăng nhập để truy cập trang này.")
 
-
-  
-
-
-
+# Main Streamlit app starts here
+show_home_page()
