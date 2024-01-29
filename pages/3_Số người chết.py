@@ -1,122 +1,141 @@
-####################################
-# Global CO2 Emissions dashboard
-# (c) Alan Jones, 2023
-####################################
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import json
+import geopandas as gpd
+import folium
+from streamlit_folium import folium_static
+import clickhouse_connect
+import math
+import pydeck as pdk
+# File: file1.py
 
 st.set_page_config(layout="wide")
 
-# the data is local but it might better to cache it
-@st.cache_data
-def get_data():
-    df_w = pd.read_csv('data/co2_total_world.csv')
-    df_w = df_w.drop(columns=['Unnamed: 0'])
-    df_total = pd.read_csv('data/co2_total.csv')
-    df_total = df_total.drop(columns=['Unnamed: 0'])
-    countries = df_total['Entity'].unique()
-    return df_w, df_total, countries
+st.title("CHI CỤC DÂN SỐ - KẾ HOẠCH HÓA GIA ĐÌNH")
+st.info("Số người chết phân theo quận/huyện")
 
-# set dataframes, and countries list
-df_w, df_total, countries = get_data()
+json1 = f"states_india.geojson"
+# Query SQL để lấy dữ liệu từ bảng
+client = clickhouse_connect.get_client(host='14.177.238.175', username='vgm', password='vgm123', database='vgm')
+result = client.query('SELECT * from duLieuDanSoHaNoi')
+df = pd.DataFrame(result.result_rows, columns=result.column_names)
+# Chuyển giá trị về số thập phân với 2 chữ số sau dấu phẩy
+df['indicator_value'] = df['indicator_value'].astype(int)
 
-# initialise the year if not already set
-if 'year' not in st.session_state:
-    st.session_state['year'] = 2021
+df_selected = df[df['indicator'].isin(['soNguoiChet'])]
+# Xây dựng bảng theo quận huyện và năm
+df_pivot = df_selected.pivot(index='district', columns='year', values='indicator_value')
 
+# Hiển thị bảng trong Streamlit
+st.table(df_pivot)
+# Tiện ích lọc theo năm
+selected_year = st.slider("Chọn Năm", min_value=int(df["year"].min()), max_value=int(df["year"].max()), value=int(df["year"].max()))
+# Lọc dữ liệu theo năm được chọn
+df_selected_year = df[df["year"] == selected_year]
+# Lọc dữ liệu để chỉ lấy thông tin về diện tích
+df_songuoichet = df_selected_year[df_selected_year['indicator'] == 'soNguoiChet']
+# Tạo biểu đồ cột cho dân số
+fig_songuoichet = px.bar(
+    df_songuoichet,
+    x='district',
+    y='indicator_value',
+    labels={'indicator_value': 'Số người chết', 'district': 'Quận/Huyện','year' :'Năm'},
+    hover_data={'year': True},
+    category_orders={"district": df_songuoichet.sort_values("indicator_value")["district"]},  # Sắp xếp theo giá trị của indicator_value
+)
+fig_songuoichet.update_xaxes(categoryorder='total descending', tickangle=45)
+# Chia layout thành hai cột
+col1, col2 = st.columns(2)
 
-
-#
-# Define layout
-#
-# header bar 
-# - contains header text in the first and the global emissions for the selected year
-colh1, colh2 = st.columns((4,2))
-colh1.markdown("## Global CO2 Emissions")
-colh2.markdown("")  # this will be overwritten in the app
-
-# body columns
-# - the first column contains the map of global emissions
-# - the second column contains graphs for emissions from selected countries 
-col1, col2 = st.columns ((8,4))
-
-# footer - acknowledgements, etc
-footer = st.container()
-footer.write("Global CO2 Emission Data from 1750 to 2021. Data derived, with thanks, from [__*Our World in Data*__](https://ourworldindata.org/)")
-
-#
-# App logic
-#
-
-# define parameters for map graphic
-col = 'Annual CO₂ emissions'    # the column that contains the emissions data
-max = df_total[col].max()       # maximum emissions value for color range
-min = df_total[col].min()       # minimum emissions value for color range
-
-# define the year range for the slider
-# to get the whole range replace 1950 with the comment that follows it
-first_year = 1950 #df_total['Year'].min()
-last_year = df_total['Year'].max()
-
-# The first body column contains the map
+# Đặt nội dung vào cột 1
 with col1:
-    # get the year with a slider
-    st.session_state['year'] = st.slider('Select year',first_year,last_year, key=col)
+    st.info("Biểu đồ số người chết theo Quận/Huyện")
+    col1.plotly_chart(fig_songuoichet)
 
-    # set projection
-    p = 'equirectangular'   # default projection
-
-    # create the maps
-    fig1 = px.scatter_geo(df_total[df_total['Year']==st.session_state['year']], 
-                        locations="Code",       # The ISO code for the Entity (country)
-                        color=col,              # color is set by this column
-                        size=col,               # size of the scatter dot mirrors the color
-                        hover_name="Entity",    # hover name is the name of the Entity (country)
-                        range_color=(min,max),  # the range of values as set above
-                        scope= 'world',         # a world map - the default
-                        projection=p,           # the project as set above
-                        title='World CO2 Emissions',
-                        template = 'plotly_dark',
-                        color_continuous_scale=px.colors.sequential.Reds
-                        )
-    fig1.update_layout(margin={'r':0, 't':0, 'b':0, 'l':0})  # maximise the figure size
-    fig2 = px.choropleth(df_total[df_total['Year']==st.session_state['year']], 
-                        locations="Code",       # The ISO code for the Entity (country)
-                        color=col,              # color is set by this column
-                        hover_name="Entity",    # hover name is the name of the Entity (country)
-                        range_color=(min,max),  # the range of values as set above
-                        scope= 'world',         # a world map - the default
-                        projection=p,           # the project as set above
-                        title='World CO2 Emissions',
-                        template = 'plotly_dark',
-                        color_continuous_scale=px.colors.sequential.Reds
-                        )
-    fig2.update_layout(margin={'r':0, 't':0, 'b':0, 'l':0})  # maximise the figure size
-    
-    map = st.radio(
-    "Choose the map style",
-    ["Scatter", "Choropleth"], horizontal = True)
-    fig = fig1 if map == 'Scatter' else fig2
-
-    # plot the map
-    st.plotly_chart(fig, use_container_width=True)
-
-# the second body column contains a selector for countries and a line chart for each selected country
+# Đặt nội dung vào cột 2
 with col2:
-    # add/subtract from the selected countries
-    c = st.multiselect('Add a country:', countries, default=['United States', 'China', 'Russia', 'Germany'])
-    tab1, tab2 = col2.tabs(["Graph", "Table"])
+    st.info("Bản đồ số người chết theo Quận/Huyện")
+     # Load in the JSON data
+DATA_URL = "states_india.geojson"
+json = pd.read_json(DATA_URL)
+df_JSON = pd.DataFrame()
 
-    with tab1:
-        # plot a line graph of emissions for selected countries
-        fig = px.line(df_total[df_total['Entity'].isin(c)], x='Year', y='Annual CO₂ emissions', color = 'Entity')
-        st.plotly_chart(fig, use_container_width=True)
-    with tab2:
-        table = df_total[df_total['Year']==st.session_state['year']]
-        st.dataframe(table[table['Entity'].isin(c)], use_container_width=True)
+# Custom color scale
+COLOR_RANGE = [
+    [65, 182, 196],
+    [127, 205, 187],
+    [199, 233, 180],
+    [237, 248, 177],
+    [255, 255, 204],
+    [255, 237, 160],
+    [254, 217, 118],
+    [254, 178, 76],
+    [253, 141, 60],
+    [252, 78, 42],
+    [227, 26, 28],
+    [189, 0, 38],
+]
+# Tính giá trị tối đa của soNguoiChet và danSoTrungBinh
+max_soNguoiChet = json["features"].apply(lambda row: row["properties"]["soNguoiChet"]).max()
 
-# set the header with the new year data
-emissions = df_w[df_w['Year']==st.session_state['year']]['Annual CO₂ emissions']
-colh2.metric(label=f"__Total emissions for {st.session_state['year']}__", value=emissions)
+# Tính giá trị của BREAKS tùy thuộc vào giá trị tối đa của soNguoiChet
+BREAKS = [max_soNguoiChet * i / 10 for i in range(1, 11)]
+
+def calculate_elevation(val):
+    return math.sqrt(val) * 10
+
+# Parse the geometry out in Pandas
+df_JSON["coordinates"] = json["features"].apply(lambda row: row["geometry"]["coordinates"])
+df_JSON["soNguoiChet"] = json["features"].apply(lambda row: row["properties"]["soNguoiChet"])
+df_JSON["name"] = json["features"].apply(lambda row: row["properties"]["name"])
+df_JSON["elevation_soNguoiChet"] = json["features"].apply(lambda row: calculate_elevation(row["properties"]["soNguoiChet"]))
+
+# Tính toán giá trị màu sắc tương ứng cho soNguoiChet
+def get_fill_color_soNguoiChet(value):
+    for i, b in enumerate(BREAKS):
+        if value < b:
+            return COLOR_RANGE[i]
+    return COLOR_RANGE[-1]
+
+df_JSON["fill_color_soNguoiChet"] = df_JSON["soNguoiChet"].apply(get_fill_color_soNguoiChet)
+# Set up PyDeck for PolygonLayer with Tooltip
+polygon_layer = pdk.Layer(
+    "PolygonLayer",
+    df_JSON,
+    id="geojson_soNguoiChet",
+    opacity=0.8,
+    stroked=False,
+    get_polygon="coordinates",
+    filled=True,
+    extruded=True,
+    wireframe=True,
+    get_elevation="elevation_soNguoiChet",
+    get_fill_color="fill_color_soNguoiChet",
+    get_line_color=[255, 255, 255],
+    auto_highlight=True,
+    pickable=True,
+)
+tooltip = {"html": "<b>Số người chết:</b> {soNguoiChet} <br /><b>Quận/huyện:</b> {name}"}
+
+# Set up PyDeck for Map with the PolygonLayer
+map_deck = pdk.Deck(
+    layers=[polygon_layer],
+     tooltip=tooltip,
+    initial_view_state=pdk.ViewState(
+        latitude=21.0285, longitude=105.8542, zoom=8, maxZoom=16, pitch=45, bearing=0
+    ),
+    effects=[
+        {
+            "@@type": "LightingEffect",
+            "shadowColor": [0, 0, 0, 0.5],
+            "ambientLight": {"@@type": "AmbientLight", "color": COLOR_RANGE[0], "intensity": 1.0},
+            "directionalLights": [
+                {"@@type": "_SunLight", "timestamp": 1564696800000, "color": COLOR_RANGE[0], "intensity": 1.0, "_shadow": True}
+            ],
+        }
+    ],
+)
+
+# Display the map with PyDeck
+col2.pydeck_chart(map_deck)

@@ -1,7 +1,19 @@
 {"type":"FeatureCollection","features":[
-    {"type":"Feature","districid":"1","properties":{"name":"Ba Đình"},"geometry":{"type":"MultiPolygon",  "coordinates": [
+    {"type":"Feature","districid":"1",
+    "properties":{
+    "name":"Ba Đình",
+    "tySuatSinhTho": 10.96, 
+    "tySuatChetTho" : 5.8,
+    "tyLeTangTuNhienDanSo": 5.16, 
+    "tyLePhuNuSinhCon3TroLen" : 1.1,
+    "soTreEmSinhRa" : 2455 , 
+    "soNguoiChet" : 1294,
+    "matDoDanSo" : 24223.7, 
+    "dienTich" : 5.35, 
+    "danSoTrungBinh" : 223.1,
+    "valuePerSqm": 4563,
+    "growth": 0.3592},"geometry":{"type":"Polygon",  "coordinates": [
         [
-            [
                 [
                     105.801469498,
                     21.0304271810001
@@ -356,10 +368,18 @@
                 ]
             ]
         ]
-    ]}}, {"type":"Feature","districid":"2","properties":{"name":"Hoàn kiếm"},"geometry":{"type":"MultiPolygon",  
+    }
+    }, 
+    {"type":"Feature","districid":"2","properties":{"name":"Hoàn kiếm",
+    "valuePerSqm": 4563,
+    "tySuatSinhTho": 13.23, "tySuatChetTho" : 12.24,
+    "tyLeTangTuNhienDanSo": 0.99, "tyLePhuNuSinhCon3TroLen" : 1.28,"soTreEmSinhRa" : 1855 , "soNguoiChet" : 1716,
+    "matDoDanSo" : 26205.6, "dienTich" : 9.21, "danSoTrungBinh" : 140.2,
+    "growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.842790286,
                     21.0287423180001
@@ -490,11 +510,15 @@
                 ]
             ]
         ]
-    ]}},
-     {"type":"Feature","districid":"3","properties":{"name":"Tây Hồ"},"geometry":{"type":"MultiPolygon",  
+    }},
+     {"type":"Feature","districid":"3","properties":{"name":"Tây Hồ",
+     "tySuatSinhTho": 9.28, "tySuatChetTho" : 5.98,
+     "tyLeTangTuNhienDanSo": 3.3, "tyLePhuNuSinhCon3TroLen" : 0.75,"soTreEmSinhRa" : 1546 , "soNguoiChet" : 996,
+     "matDoDanSo" : 6833.5, "dienTich" : 24.38, "danSoTrungBinh" : 166.6,"growth": 0.3592
+     },"geometry":{"type":"Polygon",  
      "coordinates": [
         [
-            [
+            
                 [
                     105.794909104,
                     21.050823258
@@ -917,11 +941,16 @@
                 ]
             ]
         ]
-    ]}},  
-     {"type":"Feature","districid":"4","properties":{"name":"Long Biên"},"geometry":{"type":"MultiPolygon",  
+    }},  
+     {"type":"Feature","districid":"4","properties":{"name":"Long Biên",
+     "tySuatSinhTho": 13.58, "tySuatChetTho" : 4.09,
+     "tyLeTangTuNhienDanSo": 9.49, "tyLePhuNuSinhCon3TroLen" : 2.43,"soTreEmSinhRa" : 4653 , "soNguoiChet" : 1400,
+     "matDoDanSo" : 5703.1, "dienTich" : 60.09, "danSoTrungBinh" : 342.7,"growth": 0.3592
+     
+     },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.849083243,
                     21.053886376
@@ -1388,11 +1417,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"5","properties":{"name":"Cầu Giấy"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"5","properties":{"name":"Cầu Giấy",
+    "tySuatSinhTho": 13.86, "tySuatChetTho" : 3.4,
+    "tyLeTangTuNhienDanSo": 10.46, "tyLePhuNuSinhCon3TroLen" : 0.94,"soTreEmSinhRa" : 4081 , "soNguoiChet" : 1002,
+    "matDoDanSo" : 23788.4, "dienTich" : 12.38, "danSoTrungBinh" : 294.5,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.792565657,
                     21.00095602
@@ -1811,11 +1844,16 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"6","properties":{"name":"Đống Đa"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"6","properties":{"name":"Đống Đa",
+    "tySuatSinhTho": 9.55, "tySuatChetTho" : 7.9,
+    "tyLeTangTuNhienDanSo": 1.65, "tyLePhuNuSinhCon3TroLen" : 0.18,"soTreEmSinhRa" : 3609 , "soNguoiChet" : 2987,
+    "matDoDanSo" : 37979.9, "dienTich" : 9.95, "danSoTrungBinh" : 377.9,"growth": 0.3592
+    
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.814017024,
                     21.0084007090001
@@ -2122,11 +2160,16 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"7","properties":{"name":"Hai Bà Trưng"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"7","properties":{"name":"Hai Bà Trưng",
+    "tySuatSinhTho": 8.79, "tySuatChetTho" : 8.5,
+    "tyLeTangTuNhienDanSo": 0.29, "tyLePhuNuSinhCon3TroLen" : 0.11,"soTreEmSinhRa" : 6258 , "soNguoiChet" : 2497,
+    "matDoDanSo" : 28645.2, "dienTich" : 10.26, "danSoTrungBinh" : 293.9,"growth": 0.3592
+    
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.842420415,
                     20.9916070510001
@@ -2441,11 +2484,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"8","properties":{"name":"Hoàng Mai"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"8","properties":{"name":"Hoàng Mai",
+    "tySuatSinhTho": 12.64, "tySuatChetTho" : 3.56,
+    "tyLeTangTuNhienDanSo": 9.08, "tyLePhuNuSinhCon3TroLen" : 0.98,"soTreEmSinhRa" : 6825 , "soNguoiChet" : 1922,
+    "matDoDanSo" : 13431.2, "dienTich" : 40.19, "danSoTrungBinh" : 539.8,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.899228453,
                     20.9944872560001
@@ -2980,11 +3027,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"9","properties":{"name":"Thanh Xuân"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"9","properties":{"name":"Thanh Xuân",
+    "tySuatSinhTho": 13.57, "tySuatChetTho" : 4.05,
+    "tyLeTangTuNhienDanSo": 9.52, "tyLePhuNuSinhCon3TroLen" : 0.51,"soTreEmSinhRa" : 3981 , "soNguoiChet" : 1198,
+    "matDoDanSo" : 31995.6, "dienTich" : 9.17, "danSoTrungBinh" : 293.4,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.796504371,
                     20.983196693
@@ -3355,11 +3406,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"16","properties":{"name":"Sóc Sơn"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"16","properties":{"name":"Sóc Sơn",
+    "tySuatSinhTho": 12.7, "tySuatChetTho" : 3.81,
+    "tyLeTangTuNhienDanSo": 8.89, "tyLePhuNuSinhCon3TroLen" : 14.39,"soTreEmSinhRa" : 4587 , "soNguoiChet" : 1375,
+    "matDoDanSo" : 1182.3, "dienTich" : 305.51, "danSoTrungBinh" : 361.2,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.894191117,
                     21.327071931
@@ -6382,11 +6437,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"17","properties":{"name":"Đông Anh"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"17","properties":{"name":"Đông Anh",
+    "tySuatSinhTho": 10.47, "tySuatChetTho" : 4.76,
+    "tyLeTangTuNhienDanSo": 5.71, "tyLePhuNuSinhCon3TroLen" : 7.4,"soTreEmSinhRa" : 4309 , "soNguoiChet" : 1959,
+    "matDoDanSo" : 2217.3, "dienTich" : 185.68, "danSoTrungBinh" : 411.7,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.906817329,
                     21.1921052230001
@@ -8149,11 +8208,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"18","properties":{"name":"Gia Lâm"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"18","properties":{"name":"Gia Lâm",
+    "tySuatSinhTho": 12.66, "tySuatChetTho" : 5.09,
+    "tyLeTangTuNhienDanSo": 7.57, "tyLePhuNuSinhCon3TroLen" : 5.47,"soTreEmSinhRa" : 3796 , "soNguoiChet" : 1562,
+    "matDoDanSo" : 2570.3, "dienTich" : 116.64, "danSoTrungBinh" : 299.8,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.984823437,
                     21.069932619
@@ -9564,11 +9627,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"19","properties":{"name":"Nam Từ Liêm"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"19","properties":{"name":"Nam Từ Liêm",
+    "tySuatSinhTho": 15.59, "tySuatChetTho" : 2.36,
+    "tyLeTangTuNhienDanSo": 12.73, "tyLePhuNuSinhCon3TroLen" : 2.9,"soTreEmSinhRa" : 4385 , "soNguoiChet" : 687,
+    "matDoDanSo" : 9030.2, "dienTich" : 32.17, "danSoTrungBinh" : 290.5,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.735146305,
                     20.997018602
@@ -10227,11 +10294,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"20","properties":{"name":"Thanh Trì"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"20","properties":{"name":"Thanh Trì",
+    "tySuatSinhTho": 14.01, "tySuatChetTho" : 4.09,
+    "tyLeTangTuNhienDanSo": 9.92, "tyLePhuNuSinhCon3TroLen" : 6.02,"soTreEmSinhRa" : 4119 , "soNguoiChet" : 1204,
+    "matDoDanSo" : 4632.2, "dienTich" : 63.49, "danSoTrungBinh" : 294.1,"growth": 0.3592
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.789342734,
                     20.9393510680001
@@ -11150,11 +11221,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"21","properties":{"name":"Bắc Từ Liêm"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"21","properties":{"name":"Bắc Từ Liêm",
+    "tySuatSinhTho": 12.6, "tySuatChetTho" : 2.69,
+    "tyLeTangTuNhienDanSo": 9.91, "tyLePhuNuSinhCon3TroLen" : 3.5,"soTreEmSinhRa" : 4525 , "soNguoiChet" : 966,
+    "matDoDanSo" : 7938.1, "dienTich" : 45.25, "danSoTrungBinh" : 359.2,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.72967785,
                     21.0559480250001
@@ -11705,11 +11780,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"250","properties":{"name":"Mê Linh"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"250","properties":{"name":"Mê Linh",
+    "tySuatSinhTho": 12.24, "tySuatChetTho" : 4.65,
+    "tyLeTangTuNhienDanSo": 7.59, "tyLePhuNuSinhCon3TroLen" : 6.99,"soTreEmSinhRa" : 3115 , "soNguoiChet" : 1183,
+    "matDoDanSo" : 1800.6, "dienTich" : 141.29, "danSoTrungBinh" : 254.4,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.688497201,
                     21.2335778500001
@@ -13208,11 +13287,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"268","properties":{"name":"Hà Đông"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"268","properties":{"name":"Hà Đông",
+    "tySuatSinhTho": 10.42, "tySuatChetTho" : 3.21,
+    "tyLeTangTuNhienDanSo": 7.21, "tyLePhuNuSinhCon3TroLen" : 5.36,"soTreEmSinhRa" : 4539 , "soNguoiChet" : 1400,
+    "matDoDanSo" : 8773.2, "dienTich" : 49.64, "danSoTrungBinh" : 435.5,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.794442119,
                     20.9856147080001
@@ -13923,11 +14006,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"269","properties":{"name":"Sơn Tây"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"269","properties":{"name":"Sơn Tây",
+    "tySuatSinhTho": 9, "tySuatChetTho" : 4.9,
+    "tyLeTangTuNhienDanSo": 4.1, "tyLePhuNuSinhCon3TroLen" : 12.01,"soTreEmSinhRa" : 1408 , "soNguoiChet" : 767,
+    "matDoDanSo" : 1335.3, "dienTich" : 117.2, "danSoTrungBinh" : 156.5,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.524331001,
                     21.08980924
@@ -15526,11 +15613,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"271","properties":{"name":"Ba Vì"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"271","properties":{"name":"Ba Vì",
+    "tySuatSinhTho": 12.39, "tySuatChetTho" : 5.18,
+    "tyLeTangTuNhienDanSo": 7.21, "tyLePhuNuSinhCon3TroLen" : 11.76,"soTreEmSinhRa" : 3810 , "soNguoiChet" : 1593,
+    "matDoDanSo" : 729.3, "dienTich" : 421.8, "danSoTrungBinh" : 307.6,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.44328332,
                     21.264859566
@@ -17449,11 +17540,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"272","properties":{"name":"Phúc Thọ"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"272","properties":{"name":"Phúc Thọ",
+    "tySuatSinhTho": 14.45, "tySuatChetTho" : 6.06,
+    "tyLeTangTuNhienDanSo": 8.39, "tyLePhuNuSinhCon3TroLen" : 10.73,"soTreEmSinhRa" : 2028 , "soNguoiChet" : 1183,
+    "matDoDanSo" : 1648.1, "dienTich" : 118.5, "danSoTrungBinh" : 195.3,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.516290161,
                     21.156204926
@@ -18912,11 +19007,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"273","properties":{"name":"Đan Phượng"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"273","properties":{"name":"Đan Phượng",
+    "tySuatSinhTho": 11.9, "tySuatChetTho" : 5.51,
+    "tyLeTangTuNhienDanSo": 6.39, "tyLePhuNuSinhCon3TroLen" : 10.44,"soTreEmSinhRa" : 2215 , "soNguoiChet" : 1025,
+    "matDoDanSo" : 2391.1, "dienTich" : 77.83, "danSoTrungBinh" : 186.1,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.664299913,
                     21.0654587560001
@@ -19787,11 +19886,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"274","properties":{"name":"Hoài Đức"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"274","properties":{"name":"Hoài Đức",
+    "tySuatSinhTho": 10.75, "tySuatChetTho" : 4.4,
+    "tyLeTangTuNhienDanSo": 6.35, "tyLePhuNuSinhCon3TroLen" : 14.3,"soTreEmSinhRa" : 3035 , "soNguoiChet" : 1243,
+    "matDoDanSo" : 3324.3, "dienTich" : 84.92, "danSoTrungBinh" : 282.3,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.716933807,
                     21.072034893
@@ -20962,11 +21065,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"275","properties":{"name":"Quốc Oai"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"275","properties":{"name":"Quốc Oai",
+    "tySuatSinhTho": 11.89, "tySuatChetTho" : 5.18,
+    "tyLeTangTuNhienDanSo": 6.71, "tyLePhuNuSinhCon3TroLen" : 10.16,"soTreEmSinhRa" : 2430 , "soNguoiChet" : 1058,
+    "matDoDanSo" : 1351.7, "dienTich" : 151.22, "danSoTrungBinh" : 204.4,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.639840929,
                     21.043986563
@@ -22741,11 +22848,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"276","properties":{"name":"Thạch Thất"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"276","properties":{"name":"Thạch Thất",
+    "tySuatSinhTho": 12.6, "tySuatChetTho" : 5,
+    "tyLeTangTuNhienDanSo": 7.6, "tyLePhuNuSinhCon3TroLen" : 12.45,"soTreEmSinhRa" : 2848 , "soNguoiChet" : 1129,
+    "matDoDanSo" : 1205.1, "dienTich" : 187.53, "danSoTrungBinh" : 226,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.634350682,
                     21.0443290970001
@@ -24696,11 +24807,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"277","properties":{"name":"Chương Mỹ"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"277","properties":{"name":"Chương Mỹ",
+    "tySuatSinhTho": 12.15, "tySuatChetTho" : 5.06,
+    "tyLeTangTuNhienDanSo": 7.09, "tyLePhuNuSinhCon3TroLen" : 11.79,"soTreEmSinhRa" : 4267 , "soNguoiChet" : 1777,
+    "matDoDanSo" : 1478.9, "dienTich" : 237.483, "danSoTrungBinh" : 351.2,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.694979934,
                     20.955231419
@@ -26727,11 +26842,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"278","properties":{"name":"Thanh Oai"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"278","properties":{"name":"Thanh Oai",
+    "tySuatSinhTho": 12.16, "tySuatChetTho" : 5.54,
+    "tyLeTangTuNhienDanSo": 6.62, "tyLePhuNuSinhCon3TroLen" : 7.7,"soTreEmSinhRa" : 2746 , "soNguoiChet" : 1252,
+    "matDoDanSo" : 1814.9, "dienTich" : 124.47, "danSoTrungBinh" : 225.9,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.816363668,
                     20.9027814460001
@@ -28026,11 +28145,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"279","properties":{"name":"Thường Tín"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"279","properties":{"name":"Thường Tín",
+    "tySuatSinhTho": 10.78, "tySuatChetTho" : 5.6,
+    "tyLeTangTuNhienDanSo": 5.18, "tyLePhuNuSinhCon3TroLen" : 14.94,"soTreEmSinhRa" : 2843 , "soNguoiChet" : 1478,
+    "matDoDanSo" : 2027.2, "dienTich" : 130.13, "danSoTrungBinh" : 263.8,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.832590443,
                     20.801145682
@@ -28997,11 +29120,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"280","properties":{"name":"Phú Xuyên"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"280","properties":{"name":"Phú Xuyên",
+    "tySuatSinhTho": 16.62, "tySuatChetTho" : 6.52,
+    "tyLeTangTuNhienDanSo": 10.1, "tyLePhuNuSinhCon3TroLen" : 8.72,"soTreEmSinhRa" : 3854 , "soNguoiChet" : 1511,
+    "matDoDanSo" : 1336.1, "dienTich" : 173.56, "danSoTrungBinh" : 231.9,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.90714056,
                     20.667562821
@@ -30224,11 +30351,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"281","properties":{"name":"Ứng Hòa"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"281","properties":{"name":"Ứng Hòa",
+    "tySuatSinhTho": 9.87, "tySuatChetTho" : 6.83,
+    "tyLeTangTuNhienDanSo": 3.04, "tyLePhuNuSinhCon3TroLen" : 15.07,"soTreEmSinhRa" : 2130 , "soNguoiChet" : 1474,
+    "matDoDanSo" : 1146.9, "dienTich" : 188.24, "danSoTrungBinh" : 215.9,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.735127456,
                     20.8090917590001
@@ -31667,11 +31798,15 @@
                 ]
             ]
         ]
-    ]}},
-    {"type":"Feature","districid":"282","properties":{"name":"Mỹ Đức"},"geometry":{"type":"MultiPolygon",  
+    }},
+    {"type":"Feature","districid":"282","properties":{"name":"Mỹ Đức",
+    "tySuatSinhTho": 14.37, "tySuatChetTho" : 6.48,
+    "tyLeTangTuNhienDanSo": 7.89, "tyLePhuNuSinhCon3TroLen" : 10.19,"soTreEmSinhRa" : 3021 , "soNguoiChet" : 1363,
+    "matDoDanSo" : 928.8, "dienTich" : 226.31, "danSoTrungBinh" : 210.2,"growth": 0.359
+    },"geometry":{"type":"Polygon",  
     "coordinates": [
         [
-            [
+            
                 [
                     105.709201976,
                     20.809338724
@@ -33422,5 +33557,8 @@
                 ]
             ]
         ]
-    ]}}
+    }}
     ]}
+
+
+    

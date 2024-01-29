@@ -1,7 +1,13 @@
 plotly
 pandas
+geopandas
 streamlit
 dash
-geopandas==0.10.2
+dash_core_components
+dash_html_components
+clickhouse_connect
 folium
 streamlit_folium
+streamlit_lottie
+# psycopg2-binary
+# sqlalchemy

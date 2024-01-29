@@ -1,99 +1,148 @@
-  # the data is local but it might better to cache it
-@st.cache_data
-def get_data():
-    df_w = query_data(conn, query)
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import json
+import geopandas as gpd
+import folium
+from streamlit_folium import folium_static
+import clickhouse_connect
+import math
+import pydeck as pdk
+# File: file1.py
 
-    # In danh sách các tên cột để kiểm tra xem "Unnamed: 0" có trong đó hay không
-    print("Column names:", df_w.columns.tolist())
+st.set_page_config(layout="wide")
 
-    # Kiểm tra xem cột "Unnamed: 0" có tồn tại trong DataFrame hay không
-    if 'Unnamed: 0' in df_w.columns:
-        df_w = df_w.drop(columns=['Unnamed: 0'])
+st.title("CHI CỤC DÂN SỐ - KẾ HOẠCH HÓA GIA ĐÌNH")
+st.info("Tỷ lệ phụ nữ sinh con thứ 3 phân theo quận/huyện")
 
-    return df_w
+json1 = f"states_india.geojson"
+query = "SELECT * FROM ty_suat_chet_tho;"
+client = clickhouse_connect.get_client(host='14.177.238.175', username='vgm', password='vgm123', database='vgm')
+result = client.query('SELECT * from duLieuDanSoHaNoi')
+df = pd.DataFrame(result.result_rows, columns=result.column_names)
+# Chuyển giá trị về số thập phân với 2 chữ số sau dấu phẩy
+df['indicator_value'] = df['indicator_value'].round(2)
+df['indicator_value'] = df['indicator_value'].astype(str).replace("nan", 0)
+df_selected = df[df['indicator'].isin(['tyLePhuNuSinhCon3TroLen'])]
+# Xây dựng bảng theo quận huyện và năm
+df_pivot = df_selected.pivot(index='district', columns='year', values='indicator_value')
+# Hiển thị bảng trong Streamlit
+st.table(df_pivot)
+# Tiện ích lọc theo năm
+selected_year = st.slider("Chọn Năm", min_value=int(df["year"].min()), max_value=int(df["year"].max()), value=int(df["year"].max()))
+# Lọc dữ liệu theo năm được chọn
+df_selected_year = df[df["year"] == selected_year]
+# Lọc dữ liệu để chỉ lấy thông tin về diện tích
+df_tyle = df_selected_year[df_selected_year['indicator'] == 'tyLePhuNuSinhCon3TroLen']
+# Tạo biểu đồ cột cho dân số
+fig_tyle = px.bar(
+    df_tyle,
+    x='district',
+    y='indicator_value',
+    labels={'indicator_value': 'Tỷ lệ phụ nữ sinh con thứ 3 trở lên ', 'district': 'Quận/Huyện','year' :'Năm'},
+    hover_data={'year': True},  # Định dạng cho hover
+    category_orders={"district": df_tyle.sort_values("indicator_value")["district"]},  # Sắp xếp theo giá trị của indicator_value
+)
+fig_tyle.update_xaxes(categoryorder='total descending', tickangle=45)
+# Lọc dữ liệu theo năm được chọn
+filtered_df = df[df['year'] == selected_year]
 
-# Gọi hàm để xem thông tin cột
-get_data()
+# Chia layout thành hai cột
+col1, col2 = st.columns(2)
 
-# set dataframes, and countries list
-df_w = get_data()
-
-# initialise the year if not already set
-if 'year' not in st.session_state:
-    st.session_state['year'] = 2021
-
-
-
-#
-# Define layout
-#
-# header bar 
-# - contains header text in the first and the global emissions for the selected year
-colh1, colh2 = st.columns((4,2))
-colh1.markdown("## Global CO2 Emissions")
-colh2.markdown("")  # this will be overwritten in the app
-
-# body columns
-# - the first column contains the map of global emissions
-# - the second column contains graphs for emissions from selected countries 
-col1, col2 = st.columns ((8,4))
-
-#
-# App logic
-#
-
-# define parameters for map graphic
-col = 'indicator_value'    # the column that contains the emissions data
-max = df_w[col].max()       # maximum emissions value for color range
-min = df_w[col].min()       # minimum emissions value for color range
-
-# define the year range for the slider
-# to get the whole range replace 1950 with the comment that follows it
-first_year = 2018 #df_total['Year'].min()
-last_year = df_w['year'].max()
-
-# The first body column contains the map
+# Đặt nội dung vào cột 1
 with col1:
-    # get the year with a slider
-    st.session_state['year'] = st.slider('Select year',first_year,last_year, key=col)
+    st.info("Biểu đồ Tỷ lệ phụ nữ sinh con thứ 3 theo Quận/Huyện")
+    col1.plotly_chart(fig_tyle)
 
-    # set projection
-    p = 'equirectangular'   # default projection
+# Đặt nội dung vào cột 2
+with col2:
+    st.info("Bản đồ Tỷ lệ phụ nữ sinh con thứ 3 theo Quận/Huyện")
+          # Load in the JSON data
+# Load in the JSON data
+DATA_URL = "states_india.geojson"
+json = pd.read_json(DATA_URL)
+df_JSON = pd.DataFrame()
 
-    # create the maps
-    fig1 = px.scatter_geo(df_w[df_w['year']==st.session_state['year']], 
-                        locations="districtid",       # The ISO code for the Entity (country)
-                        color=col,              # color is set by this column
-                        size=col,               # size of the scatter dot mirrors the color
-                        hover_name="district",    # hover name is the name of the Entity (country)
-                        range_color=(min,max),  # the range of values as set above
-                        scope= 'world',         # a world map - the default
-                        projection=p,           # the project as set above
-                        title='indicator_value',
-                        template = 'plotly_dark',
-                        color_continuous_scale=px.colors.sequential.Reds
-                        )
-    fig1.update_layout(margin={'r':0, 't':0, 'b':0, 'l':0})  # maximise the figure size
-    fig2 = px.choropleth(df_w[df_w['year']==st.session_state['year']], 
-                        locations="indicator",       # The ISO code for the Entity (country)
-                        color=col,              # color is set by this column
-                        hover_name="districtid",    # hover name is the name of the Entity (country)
-                        range_color=(min,max),  # the range of values as set above
-                        scope= 'world',         # a world map - the default
-                        projection=p,           # the project as set above
-                        title='indicator_value',
-                        template = 'plotly_dark',
-                        color_continuous_scale=px.colors.sequential.Reds
-                        )
-    fig2.update_layout(margin={'r':0, 't':0, 'b':0, 'l':0})  # maximise the figure size
-    
-    map = st.radio(
-    "Choose the map style",
-    ["Scatter", "Choropleth"], horizontal = True)
-    fig = fig1 if map == 'Scatter' else fig2
+# Custom color scale
+COLOR_RANGE = [
+    [65, 182, 196],
+    [127, 205, 187],
+    [199, 233, 180],
+    [237, 248, 177],
+    [255, 255, 204],
+    [255, 237, 160],
+    [254, 217, 118],
+    [254, 178, 76],
+    [253, 141, 60],
+    [252, 78, 42],
+    [227, 26, 28],
+    [189, 0, 38],
+]
 
-    # plot the map
-    st.plotly_chart(fig, use_container_width=True)
+# Tính giá trị tối đa của tyLePhuNuSinhCon3TroLen và danSoTrungBinh
+max_tyLePhuNuSinhCon3TroLen = json["features"].apply(lambda row: row["properties"]["tyLePhuNuSinhCon3TroLen"]).max()
 
-# set the header with the new year data
-emissions = df_w[df_w['year']==st.session_state['year']]['indicator_value']
+# Tính giá trị của BREAKS tùy thuộc vào giá trị tối đa của tyLePhuNuSinhCon3TroLen
+BREAKS = [max_tyLePhuNuSinhCon3TroLen * i / 10 for i in range(1, 11)]
+
+def calculate_elevation(val):
+    return math.sqrt(val) * 10
+
+# Parse the geometry out in Pandas
+df_JSON["coordinates"] = json["features"].apply(lambda row: row["geometry"]["coordinates"])
+df_JSON["tyLePhuNuSinhCon3TroLen"] = json["features"].apply(lambda row: row["properties"]["tyLePhuNuSinhCon3TroLen"])
+df_JSON["name"] = json["features"].apply(lambda row: row["properties"]["name"])
+df_JSON["elevation_tyLePhuNuSinhCon3TroLen"] = json["features"].apply(lambda row: calculate_elevation(row["properties"]["tyLePhuNuSinhCon3TroLen"]))
+# Tính toán giá trị màu sắc tương ứng cho tyLePhuNuSinhCon3TroLen
+def get_fill_color_tyLePhuNuSinhCon3TroLen(value, hover_state):
+    if hover_state is not None and hover_state["id"] == value["geojson_tyLePhuNuSinhCon3TroLen"]:
+        return [255, 255, 0, 255]  # Màu sắc khi hover
+    else:
+        for i, b in enumerate(BREAKS):
+            if value["tyLePhuNuSinhCon3TroLen"] < b:
+                return COLOR_RANGE[i]
+        return COLOR_RANGE[-1]
+
+df_JSON["fill_color_tyLePhuNuSinhCon3TroLen"] = df_JSON.apply(lambda row: get_fill_color_tyLePhuNuSinhCon3TroLen(row, st.session_state.get("hover_state")), axis=1)
+
+# Set up PyDeck for PolygonLayer with Tooltip
+polygon_layer = pdk.Layer(
+    "PolygonLayer",
+    df_JSON,
+    id="geojson_tyLePhuNuSinhCon3TroLen",
+    opacity=0.8,
+    stroked=False,
+    get_polygon="coordinates",
+    filled=True,
+    extruded=True,
+    wireframe=True,
+    get_elevation="elevation_tyLePhuNuSinhCon3TroLen",
+    get_fill_color="fill_color_tyLePhuNuSinhCon3TroLen",
+    get_line_color=[255, 255, 255],
+    auto_highlight=True,
+    pickable=True,
+)
+tooltip = {"html": "<b>Tỷ lệ phụ nữ sinh con thứ 3 trở lên:</b> {tyLePhuNuSinhCon3TroLen} <br /><b>Quận/huyện:</b> {name}"}
+
+# Set up PyDeck for Map with the PolygonLayer
+map_deck = pdk.Deck(
+    layers=[polygon_layer],
+     tooltip=tooltip,
+    initial_view_state=pdk.ViewState(
+        latitude=21.0285, longitude=105.8542, zoom=8, maxZoom=16, pitch=45, bearing=0
+    ),
+    effects=[
+        {
+            "@@type": "LightingEffect",
+            "shadowColor": [0, 0, 0, 0.5],
+            "ambientLight": {"@@type": "AmbientLight", "color": COLOR_RANGE[0], "intensity": 1.0},
+            "directionalLights": [
+                {"@@type": "_SunLight", "timestamp": 1564696800000, "color": COLOR_RANGE[0], "intensity": 1.0, "_shadow": True}
+            ],
+        }
+    ],
+)
+
+# Display the map with PyDeck
+col2.pydeck_chart(map_deck)
