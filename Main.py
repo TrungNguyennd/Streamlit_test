@@ -1,62 +1,47 @@
+# streamlit_app.py
+
+import hmac
 import streamlit as st
-from streamlit_lottie import st_lottie
-import json
 
-# Tạo một session state để lưu trạng thái đăng nhập
-if 'is_logged_in' not in st.session_state:
-    st.session_state.is_logged_in = False
 
-def login(username, password):
-    # Thực hiện xác thực đơn giản (có thể cần thay đổi)
-    if username == "admin" and password == "admin":
-        st.session_state.is_logged_in = True
-        return True
-    else:
-        return False
+def check_password():
+    """Returns `True` if the user had a correct password."""
 
-@st.cache_data
-def load_lottiefile(filepath: str):
-    with open(filepath, "r") as f:
-        return json.load(f)
+    def login_form():
+        """Form with widgets to collect user information"""
+        with st.form("Credentials"):
+            st.text_input("Username", key="username")
+            st.text_input("Password", type="password", key="password")
+            st.form_submit_button("Log in", on_click=password_entered)
 
-# Cấu hình trang để chiếm toàn bộ màn hình
-st.set_page_config(layout="wide")
-
-# Trang đăng nhập
-def show_login_page():
-    st.title("Đăng nhập")
-
-    # Hiển thị các ô nhập liệu và nút đăng nhập
-    username = st.text_input("Tên đăng nhập")
-    password = st.text_input("Mật khẩu", type="password")
-    login_button = st.button("Đăng nhập")
-
-    # Xử lý sự kiện khi nút đăng nhập được nhấn
-    if login_button:
-        if login(username, password):
-            st.success("Đăng nhập thành công!")
-            st.session_state.is_logged_in = True        
-            # Tải lại ứng dụng để hiển thị trang chính
-            st.experimental_rerun()
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if st.session_state["username"] in st.secrets[
+            "passwords"
+        ] and hmac.compare_digest(
+            st.session_state["password"],
+            st.secrets.passwords[st.session_state["username"]],
+        ):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Don't store the username or password.
+            del st.session_state["username"]
         else:
-            st.error("Đăng nhập không thành công. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.")
+            st.session_state["password_correct"] = False
 
-# Trang chính sau khi đăng nhập
-def show_main_page():
-    st.markdown("""
-    # Atlas điện tử - Dân số Hà Nội
-    ---
-    ### Sử dụng dữ liệu của Chi cục dân số  - kế hoạch hóa gia đình để xây dựng lên các atlas điện tử.
-    ---
-    """)
+    # Return True if the username + password is validated.
+    if st.session_state.get("password_correct", False):
+        return True
 
-    lottie2 = load_lottiefile("place2.json")
-    st_lottie(lottie2, key='place', height=400, width=400)
+    # Show inputs for username + password.
+    login_form()
+    if "password_correct" in st.session_state:
+        st.error("😕 User not known or password incorrect")
+    return False
 
-# Kiểm tra trạng thái đăng nhập để hiển thị trang đăng nhập hoặc trang chính
-if st.session_state.is_logged_in:
-    # Nếu đã đăng nhập, hiển thị trang chính
-    show_main_page()
-else:
-    # Nếu chưa đăng nhập, hiển thị trang đăng nhập
-    show_login_page()
+
+if not check_password():
+    st.stop()
+
+# Main Streamlit app starts here
+st.write("Here goes your normal Streamlit app...")
+st.button("Click me")
