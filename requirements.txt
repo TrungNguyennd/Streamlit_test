@@ -10,4 +10,5 @@ folium
 streamlit_folium
 streamlit_lottie
 pydeck
+altair
 
