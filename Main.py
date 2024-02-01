@@ -1,62 +1,78 @@
-import hmac
+# main.py
 import streamlit as st
-from streamlit_lottie import st_lottie
-import json
-def check_password():
-    """Returns `True` if the user had a correct password."""
-    def login_form():
-        """Form with widgets to collect user information"""
-        with st.form("Credentials"):
-            st.text_input("Username", key="username")
-            st.text_input("Password", type="password", key="password")
-            st.form_submit_button("Log in", on_click=password_entered)
+from pathlib import Path
+import importlib
 
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if (
-            st.session_state["username"] in st.secrets["passwords"] and
-            hmac.compare_digest(
-                st.session_state["password"],
-                st.secrets.passwords[st.session_state["username"]],
-            )
-        ):
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store the username or password.
-            del st.session_state["username"]
-        else:
-            st.session_state["password_correct"] = False
+st.set_page_config(page_title="Quy mô dân số", layout="wide")
 
-    # Return True if the username + password is validated.
-    if st.session_state.get("password_correct") is True:
-        return True
+# Tạo từ điển ánh xạ tên danh mục cấp 2 vào tên tệp dữ liệu Python
+category_mapping = {
+    'Quy mô và tốc độ tăng dân số bình quân': 'quymo',
+    'Tốc độ tăng dân số tự nhiên (sinh-tử)': 'tangdan',
+    'Tốc độ tăng dân số cơ học (đi-đến)': 'tangdancohoc',
+    'Mật độ dân số': 'matdodanso',
+    'Số sinh và tỷ suất sinh': 'sosinh',
+    'Số sinh 3+ và tỷ lệ sinh 3+': 'sosinh3plus',
+    'Cơ cấu về giới tính': '2_gioitinh',
+    'Tổng số phụ nữ 15-49 và số phụ nữ 15-49 có chồng': '2_tongphunu',
+    'Tổng số phụ nữ 15-49 và phụ nữ 30-49 chưa có chồng': '2_tongchuacochong',
+    'Tổng số phụ nữ 15-49 có chồng và phụ nữ 35-49 có chồng có đủ 2 con': '2_tongcochong2con',
+    'Dân số là người cao tuổi trên 60 tuổi': '2_dansotren60',
+    'Dân số là người cao tuổi trên 60 và 80 tuổi': '2_dansotren80',
+    'Tỷ lệ sàng lọc trước sinh': '3_tyle',
+    'Tỷ lệ sàng lọc sơ sinh': '3_tylesang',
+    'Tỷ số giới tính khi sinh': '3_tysogioitinh',
+    'Tỷ lệ Người cao tuổi được khám sức khoẻ định kỳ': '3_tylekhamsk',
+    'Tỷ lệ khám sức khoẻ trước khi kết hôn': '3_tylekham',
+    'Dự báo dân số': 'du_bao',
+}
 
-    # Show inputs for username + password.
-    login_form()
-    if "password_correct" in st.session_state:
-        st.error("😕 User not known or password incorrect")
-    return False
-@st.cache_data
-def load_lottiefile(filepath: str):
-    with open(filepath, "r") as f:
-        return json.load(f)
+def get_data_files(selected_category_level_1, selected_category_level_2):
+    if selected_category_level_1 == 'Quy mô, phân bố và biến động dân số':
+        return [f for f in Path("data").rglob("*.py")]
+    else:
+        selected_data_file = category_mapping.get(selected_category_level_2, selected_category_level_2)
+        return [f"data/{selected_data_file}.py"]
 
-if not check_password():
-    st.stop()
+def load_module(selected_category_level_2):
+    selected_data_file = category_mapping.get(selected_category_level_2, selected_category_level_2)
+    module_name = f"data.{selected_data_file}"
+    return importlib.import_module(module_name)
 
-# Trang chính sau khi đăng nhập
-def show_main_page():
-    st.markdown("""
-    # Atlas điện tử - Dân số Hà Nội
-    ---
-    ### Sử dụng dữ liệu của Chi cục dân số  - kế hoạch hóa gia đình để xây dựng lên các atlas điện tử.
-    ---
-    """)
+def main():
+    # Tạo layout với 2 cột
+    col_menu = st.sidebar
+    col_content = st
 
-    lottie2 = load_lottiefile("place2.json")
-    st_lottie(lottie2, key='place', height=400, width=400)
+    # Menu bên trái
+    col_menu.title('🏂 Atlas dân số Hà Nội')
+    col_menu.write('Atlas dân số Hà Nội thể hiện sự phân bố dân số, diện tích, tỷ lệ tăng dân số tự nhiên tỷ lệ sinh, và các chỉ tiêu khác 10 năm từ 2014-2023 tại các quận/huyện thuộc Thành Phố Hà Nội')
 
-# Main Streamlit app starts here
-show_main_page()
+    # Dựa trên lựa chọn của người dùng ở cấp 1, hiển thị cấp 2 phù hợp
+    selected_category_level_1 = col_menu.selectbox('Chọn nhóm chỉ tiêu', ['Quy mô, phân bố và biến động dân số', 'Cơ cấu dân số', 'Chất lượng dân số'])
+    
+    selected_category_level_2_options = []
+    if selected_category_level_1 == 'Quy mô, phân bố và biến động dân số':
+        selected_category_level_2_options = ['Quy mô và tốc độ tăng dân số bình quân','Tốc độ tăng dân số tự nhiên (sinh-tử)','Tốc độ tăng dân số cơ học (đi-đến)','Mật độ dân số','Số sinh và tỷ suất sinh','Số sinh 3+ và tỷ lệ sinh 3+']
+    elif selected_category_level_1 == 'Cơ cấu dân số':
+        selected_category_level_2_options = ['Cơ cấu về giới tính', 'Tổng số phụ nữ 15-49 và số phụ nữ 15-49 có chồng', 'Tổng số phụ nữ 15-49 và phụ nữ 30-49 chưa có chồng', 'Tổng số phụ nữ 15-49 có chồng và phụ nữ 35-49 có chồng có đủ 2 con', 'Dân số là người cao tuổi trên 60 tuổi', 'Dân số là người cao tuổi trên 60 và 80 tuổi']
+    elif selected_category_level_1 == 'Chất lượng dân số':
+        selected_category_level_2_options = ['Tỷ lệ sàng lọc trước sinh', 'Tỷ lệ sàng lọc sơ sinh', 'Tỷ số giới tính khi sinh', 'Tỷ lệ Người cao tuổi được khám sức khoẻ định kỳ', 'Tỷ lệ khám sức khoẻ trước khi kết hôn']
 
-# Ẩn widget đăng nhập khi đã đăng nhập thành công
-st.text("")  # hoặc st.empty()
+    selected_category_level_2 = col_menu.selectbox('Chọn chỉ tiêu', selected_category_level_2_options)
+
+    # Lấy danh sách tệp dữ liệu dựa trên lựa chọn cấp 2
+    data_files = get_data_files(selected_category_level_1, selected_category_level_2)
+
+    # Thêm selectbox để chọn năm
+    selected_year = col_menu.selectbox('Chọn năm', [2019, 2021, 2022, 2023])
+
+    # Lấy tên tệp dữ liệu Python dựa trên tên danh mục cấp 2
+    selected_data_file = category_mapping.get(selected_category_level_2, selected_category_level_2)
+
+    # Import module và gọi hàm xử lý dữ liệu
+    selected_module = load_module(selected_category_level_2)
+    selected_module.load_data(selected_year)
+
+if __name__ == "__main__":
+    main()
