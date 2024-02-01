@@ -1,14 +1,5 @@
-plotly
-pandas
-geopandas
 streamlit
-dash
-dash_core_components
-dash_html_components
-clickhouse_connect
-folium
-streamlit_folium
-streamlit_lottie
-pydeck
+pandas
 altair
-
+plotly
+pydeck
